@@ -1,10 +1,17 @@
 {
-  "name": "${PROJECT_NAME}",
+  "name": "i18n_cli",
   "version": "1.0.0",
-  "description": "",
+  "description": "Automatically set the front-end project to i18n",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "private": true
+  "bin": "./bin/autoI18n",
+  "private": true,
+  "dependencies": {
+    "@inquirer/prompts": "^7.0.0",
+    "@vue/compiler-dom": "^3.5.12",
+    "@vue/compiler-sfc": "^3.5.12",
+    "commander": "^12.1.0"
+  }
 }
