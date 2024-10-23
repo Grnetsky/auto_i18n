@@ -1,29 +1,34 @@
 import Path from "node:path";
 import fs from "fs";
 
-function readFile(path,fileName,code = "utf8") {
+export function readFile(path, fileName, code = "utf8") {
     const filePath = Path.resolve(path,fileName);
+    console.log(filePath,'xxxxxxxxxx');
     let res =  ''
-    fs.readFile(filePath, code, (err, data) => {
-        if (err) {
-            console.error(`Error reading file: ${err.message}`);
-            return ''
-        }
-        res = data
-    });
+    res = fs.readFileSync(filePath, {encoding:code});
+    console.log(res,'res')
     return res
 }
 // 写入文件
-export function writeFile(path,fileName,code = "utf8",content) {
+export function writeFile(path,fileName,content,code = "utf8",) {
     const filePath = Path.resolve(path,fileName);
-    fs.writeFile(filePath, content, {encoding:code}, (err) => {
-        if (err) {
-            console.error(`Error writing file: ${err.message}`);
-            return ''
-        }
-    });
+    console.log(fileName,content,'content')
+    fs.writeFileSync(filePath, content, {encoding:code})
     return filePath;
 }
-module.exports = {
-    readFile
-};
+
+// 创建新文
+
+export function createFolder(path,fileName) {
+    const filePath = Path.resolve(path,fileName);
+    if (!fs.existsSync(filePath)) {
+        fs.mkdirSync(filePath, { recursive: true });
+    }
+    return filePath;
+}
+
+export function appendFile(path,fileName,content) {
+    const filePath = Path.resolve(path,fileName);
+    fs.appendFileSync(filePath, content);
+    return filePath;
+}

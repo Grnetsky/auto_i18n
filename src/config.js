@@ -1,6 +1,7 @@
-export const outPut = '../'
-export const PACKAGE_JSON = 'package.json'
-export const VUE_I18N_VERSION = "^10.0.4"
-export const includes = ['*.vue']
-
-export const excludes = ['node_modules','dist','^.']
+export default {
+    outPut: '../',
+    PACKAGE_JSON : 'package.json',
+    LANGUAGE : 'js',
+    excludes : ['node_modules','dist','^.'],
+    LangFileDefaultContent:'const a = {};export default a'
+}
