@@ -68,16 +68,18 @@
 // fs.writeFileSync(outputFilePath, newVueFileContent);
 //
 // console.log('Modified .vue file has been generated:', outputFilePath);
-import {appendFile, createFolder, writeFile} from '../utils/file.js';
+import {appendFile, createFolder, findFilesByExtension, writeFile} from '../utils/file.js';
 
 // 定义常量
 
 import cliConfig from '../config.js';
 import {addI18nInPackageJon, createI18NFolder, createLanguageFiles} from "../utils/lib";
-import {VUE_I18N_VERSION, VUE_I18N, MAIN_JS_APPEND} from "./config";
+import {VUE_I18N_VERSION, VUE_I18N, MAIN_JS_APPEND, chineseSet} from "./config";
 import Path from "node:path";
+import {parseVue} from "./parse";
+import {translate} from "../http";
 
-export default function vue3Modifier(dirRootPath,languageList,codeLanguage){
+export default function vue3Modifier(dirRootPath,languageList,codeLanguage,resolePaths){
     cliConfig.LANGUAGE = codeLanguage;
     const srcPath = Path.resolve(dirRootPath,'src');
     //1.在package.json中 安装vue-i18n
@@ -91,13 +93,15 @@ export default function vue3Modifier(dirRootPath,languageList,codeLanguage){
     const indexPath = `${i18nPath}/index.` + cliConfig.LANGUAGE
     const indexContent = `import {createI18n} from 'vue-i18n';
     import {${languageList.join(',')}} from './lang';
-    const i18n = createI18n({
+    const i18n = new createI18n({
         legacy: false,
         locale: localStorage.getItem('i18n') || navigator.language,    
         silentTranslationWarn: true,
         missingWarn: false,
         silentFallbackWarn: true,
-        fallbackWarn: false,    messages: {
+        fallbackWarn: false,  
+        globalInjection: true,  
+        messages: {
             ${languageList.join(',')}
         }
     });
@@ -111,7 +115,18 @@ export default i18n;
     writeFile(Path.resolve(i18nPath,'./lang'),'index.'+ cliConfig.LANGUAGE,langIndexContent);
     appendFile(srcPath,'main.'+cliConfig.LANGUAGE,MAIN_JS_APPEND);
 
+    if(resolePaths.length > 0){
+        // 处理指定路径下的.vue文件
+        resolePaths.forEach((item)=>{
+            const vueList = findFilesByExtension(item,'.vue')
+            console.log(vueList,'xxxxxxxxxxxxxxxxx')
+            vueList.forEach((vue)=>{
+                const content = parseVue(vue)
+                writeFile(vue,'',content)
+            })
+            translate(Array.from(chineseSet),languageList,Path.resolve(i18nPath,'./lang'),codeLanguage)
+        })
+    }
     // 处理所有.vue文件
-
 
 }

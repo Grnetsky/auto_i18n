@@ -2,6 +2,8 @@ const { Command } = require('commander');
 const {select,input,Separator,checkbox } =  require('@inquirer/prompts');
 const {factory} = require("../src/index");
 const cliConfig = require("../src/config");
+const {getAllFolderPaths} = require("../src/utils/file");
+const path = require("node:path");
 
 
 const program = new Command();
@@ -44,22 +46,24 @@ program
             ],
         })
         cliConfig.LANGUAGE = codeLanguage;
-        console.log(cliConfig.LANGUAGE,'xxxxxxxmmmmmmmmmmmmmmmmmmmm');
 
-        const dealList = await checkbox({
-            message: 'Select a package manager',
-            choices: [
-                { name: 'npm', value: 'npm' },
-                { name: 'yarn', value: 'yarn' },
-                new Separator(),
-                { name: 'pnpm', value: 'pnpm', disabled: true },
-                {
-                    name: 'pnpm',
-                    value: 'pnpm',
-                    disabled: '(pnpm is not available)',
-                },
-            ]})
-        factory(frameWork,dirPath,languageList,codeLanguage);
+        const srcPath = path.resolve(dirPath,'./src');
+        const srcSubDirs = getAllFolderPaths(srcPath)
+        let dealList = []
+        if(srcSubDirs.length > 0){
+            dealList = await checkbox({
+                message: 'Select a package manager',
+                choices: [
+                    ...srcSubDirs.map((item)=>({
+                        value: item,
+                        name: item,
+                    }))
+                ]})
+
+            console.log(dealList)
+        }
+        // 获取目录下的路径
+        factory(frameWork,dirPath,languageList,codeLanguage,dealList);
     });
 
 program.parse(process.argv);

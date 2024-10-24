@@ -14,8 +14,11 @@
     "@vue/compiler-dom": "^3.5.12",
     "@vue/compiler-sfc": "^3.5.12",
     "commander": "^12.1.0",
+    "crypto-js": "^4.2.0",
     "rollup": "^4.24.0",
-    "vue-i18n": "^10.0.4"
+    "vue-i18n": "^10.0.4",
+    "xmldom": "^0.6.0",
+    "xmlserializer": "^0.6.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.9",
