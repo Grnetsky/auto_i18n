@@ -100,9 +100,13 @@ export default function vue3Modifier(dirRootPath,languageList,codeLanguage,resol
         missingWarn: false,
         silentFallbackWarn: true,
         fallbackWarn: false,  
+        fallbackLocale: 'zh',
         globalInjection: true,  
         messages: {
             ${languageList.join(',')}
+        },
+        missing(locale,key){
+            return key;
         }
     });
 
@@ -119,13 +123,12 @@ export default i18n;
         // 处理指定路径下的.vue文件
         resolePaths.forEach((item)=>{
             const vueList = findFilesByExtension(item,'.vue')
-            console.log(vueList,'xxxxxxxxxxxxxxxxx')
             vueList.forEach((vue)=>{
                 const content = parseVue(vue)
                 writeFile(vue,'',content)
             })
-            translate(Array.from(chineseSet),languageList,Path.resolve(i18nPath,'./lang'),codeLanguage)
         })
+        translate(Array.from(chineseSet),languageList,Path.resolve(i18nPath,'./lang'),codeLanguage)
     }
     // 处理所有.vue文件
 

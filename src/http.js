@@ -7,10 +7,9 @@ const CryptoJS = require("crypto-js");
 const querystring = require('querystring');
 
 export function translate(chineseList,langList,langPath,codeLanguage) {
-
     for (let i = 0; i < langList.length; i++) {
         var appKey = '440b4cce9f385b32';
-        var key = '3IpcveGENOsrkU3gAKAZJGtnDk5wqAh8';//注意：暴露appSecret，有被盗用造成损失的风险
+        var key = '3IpcveGENOsrkU3gAKAZJGtnDk5wqAh8';
         var salt = (new Date).getTime();
         var curtime = Math.round(new Date().getTime() / 1000);
         var query = chineseList;
@@ -53,7 +52,6 @@ export function translate(chineseList,langList,langPath,codeLanguage) {
             res.on('end', () => {
                 try {
                     const result = JSON.parse(data);
-                    console.log(result);
                     if (result.errorCode === '0') {
                         const json = {};
                         const translateResults = result.translateResults;

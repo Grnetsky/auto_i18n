@@ -24,3 +24,23 @@ export function createLanguageFiles(i18nPath,langList) {
         writeFile(i18nPath,langPath,cliConfig.LangFileDefaultContent)
     })
 }
+
+export function decodeHTMLEntities(text) {
+    const entities = {
+        '&lt;': '<',
+        '&gt;': '>',
+        '&amp;': '&',
+        '&quot;': '"',
+        '&#39;': "'"
+    };
+    return text.replace(/&[a-z]+;/g, match => entities[match] || match);
+}
+
+export function containsChinese(str) {
+    const chineseRegex = /[\u4e00-\u9fff]/;
+    return chineseRegex.test(str);
+}
+
+export function startsWithAny(str, charList) {
+    return charList.some(char => str.startsWith(char));
+}

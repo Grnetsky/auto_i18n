@@ -55,7 +55,6 @@ export function getAllFolderPaths(directory) {
 }
 
 export function findFilesByExtension(directory, extension) {
-    console.log(`Searching in directory: ${directory}, for extension: ${extension}`);
     let filePaths = [];
     try {
         const items = fs.readdirSync(directory, { withFileTypes: true });
@@ -65,13 +64,10 @@ export function findFilesByExtension(directory, extension) {
 
             if (item.isDirectory()) {
                 // 递归调用以处理子目录
-                console.log(`Entering directory: ${itemPath}`);
                 const subDirFiles = findFilesByExtension(itemPath, extension);
                 filePaths = filePaths.concat(subDirFiles);
             } else if (item.isFile()) {
-                console.log(`Found file: ${itemPath}`);
                 if (Path.extname(item.name) === extension) {
-                    console.log(`File matches extension: ${itemPath}`);
                     filePaths.push(itemPath);
                 }
             }
