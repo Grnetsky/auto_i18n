@@ -21,7 +21,7 @@ export function createI18NFolder(dirRootPath){
 export function createLanguageFiles(i18nPath,langList) {
     langList.forEach((lang)=>{
         const langPath = `${i18nPath}/lang/${lang}.` + cliConfig.LANGUAGE
-        writeFile(i18nPath,langPath,cliConfig.LangFileDefaultContent)
+        writeFile(i18nPath,langPath,cliConfig.langFileDefaultContent)
     })
 }
 

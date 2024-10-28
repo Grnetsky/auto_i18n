@@ -1,8 +1,8 @@
 import fs from "fs";
-import {chineseSet} from "./config";
 import {containsChinese, decodeHTMLEntities, startsWithAny} from "../utils/lib";
 import * as htmlparser2 from "htmlparser2";
 import domSerializer from "dom-serializer";
+import config from "../config";
 
 
 const propPrefix = [':','@','v-on','v-bind']
@@ -42,12 +42,12 @@ function replaceChinese(content,attr) {
     let newContent = ''
     if (!attr){
         newContent = content.replace(textInElementRegex, (match, p1) => {
-            chineseSet.add(p1)
+            config.vue3.chineseSet.add(p1)
             return `{{$t('${p1}')}}`;
         });
     }else {
         newContent = content.replace(textInElementRegex, (match, p1) => {
-            chineseSet.add(p1)
+            config.vue3.chineseSet.add(p1)
             return `$t('${p1}')`;
         });
     }

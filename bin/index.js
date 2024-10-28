@@ -1,0 +1,1 @@
+export * from './autoI18n'

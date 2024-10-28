@@ -78,21 +78,22 @@ import {VUE_I18N_VERSION, VUE_I18N, MAIN_JS_APPEND, chineseSet} from "./config";
 import Path from "node:path";
 import {parseVue} from "./parse";
 import {translate} from "../http";
+import {convertToBlock} from "@vue/compiler-dom";
 
-export default function vue3Modifier(dirRootPath,languageList,codeLanguage,resolePaths){
-    cliConfig.LANGUAGE = codeLanguage;
-    const srcPath = Path.resolve(dirRootPath,'src');
+export default function vue3Modifier(config,resolePaths){
+    const srcPath = Path.resolve(config.input,'src');
+    const vue3Config = config.vue3
     //1.在package.json中 安装vue-i18n
-    addI18nInPackageJon(dirRootPath,VUE_I18N,VUE_I18N_VERSION);
+    addI18nInPackageJon(config.input,vue3Config.VUE_I18N,vue3Config.VUE_I18N_VERSION);
     //2.在src/下创建 i18n文件夹
-    const i18nPath = createI18NFolder(dirRootPath)    //4.在main.js中引入vue-i18n
+    const i18nPath = createI18NFolder(config.input)    //4.在main.js中引入vue-i18n
 
     //3.在i18n文件夹下创建语言文件
-    createLanguageFiles(i18nPath,languageList)
+    createLanguageFiles(i18nPath,config.target)
     // 4. 写入index.js中的内容
-    const indexPath = `${i18nPath}/index.` + cliConfig.LANGUAGE
+    const indexPath = `${i18nPath}/index.` + config.language
     const indexContent = `import {createI18n} from 'vue-i18n';
-    import {${languageList.join(',')}} from './lang';
+    import {${config.target.join(',')}} from './lang';
     const i18n = new createI18n({
         legacy: false,
         locale: localStorage.getItem('i18n') || navigator.language,    
@@ -103,7 +104,7 @@ export default function vue3Modifier(dirRootPath,languageList,codeLanguage,resol
         fallbackLocale: 'zh',
         globalInjection: true,  
         messages: {
-            ${languageList.join(',')}
+            ${config.target.join(',')}
         },
         missing(locale,key){
             return key;
@@ -112,12 +113,12 @@ export default function vue3Modifier(dirRootPath,languageList,codeLanguage,resol
 
 export default i18n;
 `
-    writeFile(i18nPath,'index.' + cliConfig.LANGUAGE,indexContent)
-    const langIndexContent = languageList.reduce((acc, cur)=>{
-        return acc + `export {default as ${cur}} from './${cur}.${cliConfig.LANGUAGE}';\n`
+    writeFile(i18nPath,'index.' + config.language,indexContent)
+    const langIndexContent = config.target.reduce((acc, cur)=>{
+        return acc + `export {default as ${cur}} from './${cur}.${config.language}';\n`
     },'')
-    writeFile(Path.resolve(i18nPath,'./lang'),'index.'+ cliConfig.LANGUAGE,langIndexContent);
-    appendFile(srcPath,'main.'+cliConfig.LANGUAGE,MAIN_JS_APPEND);
+    writeFile(Path.resolve(i18nPath,'./lang'),'index.'+ config.language,langIndexContent);
+    appendFile(srcPath,'main.'+config.language,vue3Config.MAIN_JS_APPEND);
 
     if(resolePaths.length > 0){
         // 处理指定路径下的.vue文件
@@ -128,7 +129,7 @@ export default i18n;
                 writeFile(vue,'',content)
             })
         })
-        translate(Array.from(chineseSet),languageList,Path.resolve(i18nPath,'./lang'),codeLanguage)
+        translate(Array.from(vue3Config.chineseSet),config.target,Path.resolve(i18nPath,'./lang'),config.language)
     }
     // 处理所有.vue文件
 
