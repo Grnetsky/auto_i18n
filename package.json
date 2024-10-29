@@ -8,7 +8,6 @@
     "build": "rollup -c && node dist/bundle.js cli"
   },
   "bin": "./bin/autoI18n",
-  "private": true,
   "dependencies": {
     "@inquirer/prompts": "^7.0.0",
     "@vue/compiler-dom": "^3.5.12",
