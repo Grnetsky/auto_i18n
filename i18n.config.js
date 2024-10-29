@@ -1,4 +1,4 @@
-export default {
+module.exports =  {
     outPut: '../',
     input:'',
     PACKAGE_JSON : 'package.json',
@@ -7,11 +7,12 @@ export default {
     langFileDefaultContent:'const a = {};export default a',
     AppID: '440b4cce9f385b32',
     key: '3IpcveGENOsrkU3gAKAZJGtnDk5wqAh8',
-    target:['en'],
-    framework:'',
+    target:[],
+    frameWork:'',
+    from:'zh-CHS',
     vue3:{
-        VUE_I18N_VERSION : "^10.0.4",
-        VUE_I18N : 'vue-i18n',
+        DepVersion : "^10.0.4",
+        Dep : 'vue-i18n',
         includes : ['*.vue'],
         excludes : ['node_modules','dist','^.'],
         MAIN_JS_APPEND : `\nimport i18n from "./i18n";\n app.use(i18n)\n`,

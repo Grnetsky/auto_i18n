@@ -1,97 +1,23 @@
-// const { parse, compileTemplate } = require('@vue/compiler-sfc');
-// const { parse: parseTemplate, transform } = require('@vue/compiler-dom');
-//
-// // 读取 .vue 文件
-// const filePath = path.resolve(__dirname, 'test.vue');
-// const fileContent = fs.readFileSync(filePath, 'utf-8');
-//
-// // 解析 .vue 文件
-// const { descriptor } = parse(fileContent);
-//
-// // 解析模板 AST
-// const templateAST = parseTemplate(descriptor.template.content);
-// // console.log(templateAST,'ast')
-//
-// // 遍历并修改 AST
-// function processTextNodes(node) {
-//     console.log(node)
-//     if (node.type === 2) { // 文本节点
-//         console.log(node,'xxxxxxxxxxxxx')
-//         node.content = node.content.replace(/([\u4e00-\u9fa5]+)/g, '"\$1"');
-//
-//     } else if (node.children) {
-//         node.children.forEach(processTextNodes);
-//     }
-// }
-//
-// processTextNodes(templateAST);
-//
-// // 反向生成模板字符串
-// function astToString(node) {
-//     console.log(node)
-//     if (node.type === 2) { // 文本节点
-//         return node.content;
-//     } else if (node.type === 0 || node.type === 1) { // 元素节点
-//         let tagOpen = `<${node.tag}`;
-//         if (node.props?.length) {
-//             const props = node.props.map(prop => `${prop.rawName}="${prop.exp}${(prop)}"`).join(' ');
-//             tagOpen += ` ${props}`;
-//         }
-//         tagOpen += '>';
-//         const children = node.children.map(astToString).join('');
-//         const tagClose = `</${node.tag}>`;
-//         return `${tagOpen}${children}${tagClose}`;
-//     }
-//     return '';
-// }
-//
-// const newTemplateContent = astToString(templateAST);
-// console.log(newTemplateContent,'xxxxxx')
-//
-// // 重新组合 .vue 文件内容
-// const newVueFileContent = `
-// <template>
-// ${newTemplateContent}
-// </template>
-//
-// <script>
-// ${descriptor.script?.content}
-// </script>
-//
-// <style>
-// ${descriptor.styles.map(style => style.content).join('\n')}
-// </style>
-// `;
-//
-// // 输出新的 .vue 文件内容
-// const outputFilePath = path.resolve(__dirname, 'ModifiedComponent.vue');
-// fs.writeFileSync(outputFilePath, newVueFileContent);
-//
-// console.log('Modified .vue file has been generated:', outputFilePath);
 import {appendFile, createFolder, findFilesByExtension, writeFile} from '../utils/file.js';
 
 // 定义常量
 
-import cliConfig from '../config.js';
 import {addI18nInPackageJon, createI18NFolder, createLanguageFiles} from "../utils/lib";
-import {VUE_I18N_VERSION, VUE_I18N, MAIN_JS_APPEND, chineseSet} from "./config";
 import Path from "node:path";
 import {parseVue} from "./parse";
 import {translate} from "../http";
-import {convertToBlock} from "@vue/compiler-dom";
 
 export default function vue3Modifier(config,resolePaths){
     const srcPath = Path.resolve(config.input,'src');
     const vue3Config = config.vue3
     //1.在package.json中 安装vue-i18n
-    addI18nInPackageJon(config.input,vue3Config.VUE_I18N,vue3Config.VUE_I18N_VERSION);
+    addI18nInPackageJon(config);
     //2.在src/下创建 i18n文件夹
-    const i18nPath = createI18NFolder(config.input)    //4.在main.js中引入vue-i18n
+    const i18nPath = createI18NFolder(config)    //4.在main.js中引入vue-i18n
 
     //3.在i18n文件夹下创建语言文件
-    createLanguageFiles(i18nPath,config.target)
+    createLanguageFiles(i18nPath,config)
     // 4. 写入index.js中的内容
-    const indexPath = `${i18nPath}/index.` + config.language
     const indexContent = `import {createI18n} from 'vue-i18n';
     import {${config.target.join(',')}} from './lang';
     const i18n = new createI18n({
@@ -125,11 +51,11 @@ export default i18n;
         resolePaths.forEach((item)=>{
             const vueList = findFilesByExtension(item,'.vue')
             vueList.forEach((vue)=>{
-                const content = parseVue(vue)
+                const content = parseVue(vue,vue3Config)
                 writeFile(vue,'',content)
             })
         })
-        translate(Array.from(vue3Config.chineseSet),config.target,Path.resolve(i18nPath,'./lang'),config.language)
+        translate(Array.from(vue3Config.chineseSet),Path.resolve(i18nPath,'./lang'),config)
     }
     // 处理所有.vue文件
 

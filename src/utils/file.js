@@ -78,3 +78,33 @@ export function findFilesByExtension(directory, extension) {
 
     return filePaths;
 }
+
+
+function isObject(obj) {
+    return obj !== null && typeof obj === 'object';
+}
+
+export function deepAssign(target, ...sources) {
+    if (!isObject(target)) {
+        throw new TypeError('Target must be an object');
+    }
+
+    sources.forEach(source => {
+        if (isObject(source)) {
+            Object.keys(source).forEach(key => {
+                const targetValue = target[key];
+                const sourceValue = source[key];
+
+                // 如果目标值和源值均为对象，递归合并
+                if (isObject(targetValue) && isObject(sourceValue)) {
+                    deepAssign(targetValue, sourceValue);
+                } else {
+                    // 否则直接赋值
+                    target[key] = sourceValue;
+                }
+            });
+        }
+    });
+
+    return target;
+}

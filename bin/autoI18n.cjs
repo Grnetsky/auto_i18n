@@ -1,27 +1,28 @@
-const { Command } = require('commander');
 const {select,input,Separator,checkbox } =  require('@inquirer/prompts');
 const {factory} = require("../src/index");
-const cliConfig = require("../src/config");
-const {getAllFolderPaths} = require("../src/utils/file");
+const {getAllFolderPaths, deepAssign} = require("../src/utils/file");
 const path = require("node:path");
 
 const defaultConfig = require("../i18n.config");
-const {validate} = require("@babel/core/lib/config/validation/options");
+const {Command} = require("commander");
 const program = new Command();
 
 program
     .command('cli')
-    .description("Let's do this").option('-c, --config <path>', '配置文件',)
+    .description("Let's do this")
+    .option('-c, --config <path>', '配置文件',)
     .action(async () => {
-
-        const userConfig = require(path.resolve(__dirname,program.config)) || {}
-        const config = Object.assign(defaultConfig, userConfig);
+        let userConfig = {}
+        if(program.config){
+            userConfig = require(path.resolve(__dirname,program.config))
+        }
+        const config = deepAssign(defaultConfig, userConfig);
         const validate = !validateConfig(config)
         if(validate.error){
-            return throw new Error(validate.error)
+            throw new Error(validate.error)
         }
 
-        if(!config.framework) {
+        if(!config.frameWork) {
             config.frameWork = await select({
                 message: '选择项目所使用的前端框架',
                 choices: [
@@ -43,7 +44,7 @@ program
         }
 
 
-        !config.target && ( config.target = await input({ message: '输入要兼容的语言代码（具体代码可查看有道语言列表：https://ai.youdao.com/DOCSIRMA/html/trans/api/plwbfy/index.html#section-8）以空格分开' })).split(' ');
+        !config.target.length && ( config.target = await input({ message: '输入要兼容的语言代码（具体代码可查看有道语言列表：https://ai.youdao.com/DOCSIRMA/html/trans/api/plwbfy/index.html#section-8）以空格分开' }).then((s)=>{return s.split(' ')}));
 
         !config.language &&  (config.language = await select({
             message: '选择项目所使用的语言',
@@ -59,7 +60,7 @@ program
             ],
         }))
 
-        const srcPath = path.resolve(dirPath,'./src');
+        const srcPath = path.resolve(config.input,'./src');
         const srcSubDirs = getAllFolderPaths(srcPath)
         let dealList = []
         if(srcSubDirs.length > 0){

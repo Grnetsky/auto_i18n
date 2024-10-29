@@ -1,27 +1,25 @@
 import {createFolder, readFile, writeFile} from "./file";
-import cliConfig from "../config";
-
-export function addI18nInPackageJon(packagePath,libName,version){
-    const packageJson = JSON.parse(readFile(packagePath,cliConfig.PACKAGE_JSON))
-    packageJson.dependencies[libName] = version
-    writeFile(packagePath,cliConfig.PACKAGE_JSON,JSON.stringify(packageJson,null,2))
+export function addI18nInPackageJon(config){
+    const packageJson = JSON.parse(readFile(config.input,config.PACKAGE_JSON))
+    packageJson.dependencies[config[config.frameWork].Dep] = config[config.frameWork].DepVersion
+    writeFile(config.input,config.PACKAGE_JSON,JSON.stringify(packageJson,null,2))
 }
 
-export function createI18NFolder(dirRootPath){
-    const i18nPath = `${dirRootPath}/src/i18n`
+export function createI18NFolder(config){
+    const i18nPath = `${config.input}/src/i18n`
     const langPath = `${i18nPath}/lang`
-    const indexPath = `${i18nPath}/index.` + cliConfig.LANGUAGE
+    const indexPath = `${i18nPath}/index.` + config.language
 
-    createFolder(dirRootPath,i18nPath)
-    createFolder(dirRootPath,langPath)
-    writeFile(dirRootPath,indexPath,'')
+    createFolder(config.input,i18nPath)
+    createFolder(config.input,langPath)
+    writeFile(config.input,indexPath,'')
     return i18nPath
 }
 
-export function createLanguageFiles(i18nPath,langList) {
-    langList.forEach((lang)=>{
-        const langPath = `${i18nPath}/lang/${lang}.` + cliConfig.LANGUAGE
-        writeFile(i18nPath,langPath,cliConfig.langFileDefaultContent)
+export function createLanguageFiles(i18nPath,config) {
+    config.target.forEach((lang)=>{
+        const langPath = `${i18nPath}/lang/${lang}.` + config.language
+        writeFile(i18nPath,langPath,config.langFileDefaultContent)
     })
 }
 

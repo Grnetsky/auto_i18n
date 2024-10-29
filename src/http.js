@@ -1,20 +1,18 @@
 import {translateMap} from "./vue3/config";
 import {writeFile} from "./utils/file";
-import config from "./config";
-
 const http = require('http');
 const CryptoJS = require("crypto-js");
 const querystring = require('querystring');
 
-export function translate(chineseList,langList,langPath,codeLanguage) {
-    for (let i = 0; i < langList.length; i++) {
-        var appKey = '440b4cce9f385b32';
-        var key = '3IpcveGENOsrkU3gAKAZJGtnDk5wqAh8';
+export function translate(chineseList,langPath,config) {
+    for (let i = 0; i < config.target.length; i++) {
+        var appKey = config.AppID;
+        var key = config.key;
         var salt = (new Date).getTime();
         var curtime = Math.round(new Date().getTime() / 1000);
         var query = chineseList;
-        var from = 'zh-CHS';
-        var to = langList[i];
+        var from = config.from;
+        var to = config.target[i];
         var str1 = appKey + truncate(query.join("")) + salt + curtime + key;
         var vocabId = '';
 
@@ -58,7 +56,7 @@ export function translate(chineseList,langList,langPath,codeLanguage) {
                         translateResults.forEach((item) => {
                             json[item.query] = item.translation;
                         });
-                        writeFile(langPath, langList[i]+'.'+codeLanguage, `const a = ${JSON.stringify(json, null, 2)};export default a`);
+                        writeFile(langPath, config.target[i]+'.'+config.language, `const a = ${JSON.stringify(json, null, 2)};export default a`);
                     } else {
                         console.error(`Error: ${result.errorCode}`);
                     }
