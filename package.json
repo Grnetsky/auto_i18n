@@ -1,6 +1,6 @@
 {
-  "name": "i18n_cli",
-  "version": "1.0.0",
+  "name": "autoI18n",
+  "version": "0.1.0",
   "description": "Automatically set the front-end project to i18n",
   "main": "index.js",
   "scripts": {
