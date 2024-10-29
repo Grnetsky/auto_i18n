@@ -13,7 +13,7 @@ export function parseVue(vuePath,config) {
         const match = content.match(/<template>([\s\S]*)<\/template>/);
 
         if (match) {
-            const dom = htmlparser2.parseDocument(match[0],{
+            const dom = htmlparser2.parseDocument(match[0],{ // 似乎可以只通过该类去处理
                 lowerCaseTags:false,
                 lowerCaseAttributeNames:false,
                 recognizeSelfClosing:true
