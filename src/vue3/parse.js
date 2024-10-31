@@ -49,6 +49,7 @@ function replaceChinese(content,attr,config) {
             break
         case 1: //处理为文本表达式 '这是。'+1
             newContent = content.replace(textInAttributeRegex, (match, p1) => {
+                if(!containsChinese(p1))return p1;
                 config.chineseSet.add(p1)
                 return `$t('${p1}')`;
             });
