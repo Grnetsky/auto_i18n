@@ -112,7 +112,7 @@ function parseText(text,attr,config) {
 }
 
 function parseExp(exp, callback) {
-    // {{ }} 目前只处理这种
+    // 用 $t() 包裹 {{ }} 外的内容
     const expStr = exp.replace(/{{(.*?)}}/g, (match, content) => {
         // 处理 {{...}} 内的内容
         const newContent = content.replace(/(['"])(.*?)\1/g, (match, quote, text) => {
@@ -124,9 +124,17 @@ function parseExp(exp, callback) {
             return match; // 如果没有中文，则返回原匹配
         });
         return `{{${newContent}}}`; // 保留外层 {{ }}
+    }).replace(/(.*?)(?={{)/g, (match) => {
+        if(containsChinese(match)){
+            callback(match);
+            return `{{$t('${match}')}}`; // 用 $t() 包裹 {{ }} 之前的内容
+        }
+        return match;
     });
+
     return expStr;
 }
+
 
 function isExp(text) {
     return /{{(.*?)}}/.test(text.trim())

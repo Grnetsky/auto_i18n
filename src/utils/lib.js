@@ -17,7 +17,7 @@ export function createI18NFolder(config){
 }
 
 export function createLanguageFiles(i18nPath,config) {
-    config.target.forEach((lang)=>{
+    config._target.forEach((lang)=>{
         const langPath = `${i18nPath}/lang/${lang}.` + config.language
         writeFile(i18nPath,langPath,config.langFileDefaultContent)
     })

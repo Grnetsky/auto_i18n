@@ -15,7 +15,7 @@ export function translate(chineseList,langPath,config) {
         var to = config.target[i];
         var str1 = appKey + truncate(query.join("")) + salt + curtime + key;
         var vocabId = '';
-
+        console.log(to)
         var sign = CryptoJS.SHA256(str1).toString(CryptoJS.enc.Hex);
         const postData = querystring.stringify({
             q: query,
@@ -56,7 +56,7 @@ export function translate(chineseList,langPath,config) {
                         translateResults.forEach((item) => {
                             json[item.query] = item.translation;
                         });
-                        writeFile(langPath, config.target[i]+'.'+config.language, `const a = ${JSON.stringify(json, null, 2)};export default a`);
+                        writeFile(langPath, config._target[i]+'.'+config.language, `const a = ${JSON.stringify(json, null, 2)};export default a`);
                     } else {
                         console.error(`Error: ${result.errorCode}`);
                     }
