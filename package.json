@@ -3,11 +3,18 @@
   "version": "0.1.0",
   "description": "Automatically set the front-end project to i18n",
   "main": "index.js",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "rollup -c && node dist/bundle.js cli"
   },
-  "bin": "./bin/autoI18n",
+  "bin": {
+    "autoI18n": "dist/bundle.js",
+    "i18nCollect": "./bin/collectString.js"
+  },
   "dependencies": {
     "@inquirer/prompts": "^7.0.0",
     "@vue/compiler-dom": "^3.5.12",

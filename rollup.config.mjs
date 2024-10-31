@@ -4,7 +4,7 @@ import { babel } from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json'; // 导入 JSON 插件
 
 export default {
-    input: 'bin/autoI18n.cjs', // 入口文件路径
+    input: 'bin/autoI18n.js', // 入口文件路径
     output: {
         file: 'dist/bundle.js', // 输出文件路径
         format: 'cjs' // 输出格式为 CommonJS

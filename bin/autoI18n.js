@@ -62,7 +62,7 @@ program
 
         const srcPath = path.resolve(config.input,'./src');
         const srcSubDirs = getAllFolderPaths(srcPath)
-        let dealList = []
+        let dealList = [path.resolve(config.input)]
         if(srcSubDirs.length > 0){
             dealList = await checkbox({
                 message: 'Select a package manager',

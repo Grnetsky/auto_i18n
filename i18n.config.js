@@ -2,7 +2,7 @@ module.exports =  {
     outPut: '../',
     input:'',
     PACKAGE_JSON : 'package.json',
-    language : 'js',
+    language : '',
     excludes : ['node_modules','dist','^.'],
     langFileDefaultContent:'const a = {};export default a',
     AppID: '440b4cce9f385b32',

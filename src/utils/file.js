@@ -54,7 +54,7 @@ export function getAllFolderPaths(directory) {
     return folderPaths;
 }
 
-export function findFilesByExtension(directory, extension) {
+export function findFilesByExtension(directory, extension,recursion = true) {
     let filePaths = [];
     try {
         const items = fs.readdirSync(directory, { withFileTypes: true });
@@ -62,7 +62,7 @@ export function findFilesByExtension(directory, extension) {
         for (const item of items) {
             const itemPath = Path.join(directory, item.name);
 
-            if (item.isDirectory()) {
+            if (item.isDirectory() && recursion) {
                 // 递归调用以处理子目录
                 const subDirFiles = findFilesByExtension(itemPath, extension);
                 filePaths = filePaths.concat(subDirFiles);
