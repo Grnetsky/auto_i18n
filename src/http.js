@@ -1,4 +1,3 @@
-import {translateMap} from "./vue3/config";
 import {writeFile} from "./utils/file";
 const http = require('http');
 const CryptoJS = require("crypto-js");
@@ -15,7 +14,6 @@ export function translate(chineseList,langPath,config) {
         var to = config.target[i];
         var str1 = appKey + truncate(query.join("")) + salt + curtime + key;
         var vocabId = '';
-        console.log(to)
         var sign = CryptoJS.SHA256(str1).toString(CryptoJS.enc.Hex);
         const postData = querystring.stringify({
             q: query,
@@ -53,8 +51,8 @@ export function translate(chineseList,langPath,config) {
                     if (result.errorCode === '0') {
                         const json = {};
                         const translateResults = result.translateResults;
-                        translateResults.forEach((item) => {
-                            json[item.query] = item.translation;
+                        translateResults.forEach((item,index) => {
+                            json[chineseList[index]] = item.translation;
                         });
                         writeFile(langPath, config._target[i]+'.'+config.language, `const a = ${JSON.stringify(json, null, 2)};export default a`);
                     } else {

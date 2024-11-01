@@ -8,23 +8,26 @@ const propPrefix = [':','@','v-on','v-bind']
 export function parseVue(vuePath,config) {
     if (fs.existsSync(vuePath)) {
         const content = fs.readFileSync(vuePath, { encoding: 'utf8' });
-        let content2 = ''
 
         const match = content.match(/<template>([\s\S]*)<\/template>/);
 
         if (match) {
-            const dom = htmlparser2.parseDocument(match[0],{ // 似乎可以只通过该类去处理
-                lowerCaseTags:false,
-                lowerCaseAttributeNames:false,
-                recognizeSelfClosing:true
+            const dom = htmlparser2.parseDocument(match[0],{
+                lowerCaseTags: false,
+                lowerCaseAttributeNames: false,
+                recognizeSelfClosing: true,
+                emptyAttrs: false,
+                xmlMode: false,
             })
             domParser(dom,config)
             let serializedHtml = domSerializer(dom, {
                 decodeEntities: false, // 保留实体编码
+                emptyAttrs: false,
+                selfClosingTags: false,
+                recognizeSelfClosing: false,
                 lowerCaseAttributeNames: false, // 保留属性名称的大小写
                 lowerCaseTags: false, // 保留标签名称的大小写
                 xmlMode: false, // 关闭 XML 模式
-                preserveNewlines: true // 尽量保留换行符
             });
             return content.replace(match[0], serializedHtml)
         }
