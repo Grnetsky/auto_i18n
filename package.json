@@ -9,7 +9,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c && node dist/bundle.js cli"
+    "build": "rollup -c && node output/autoI18n.js cli"
   },
   "bin": {
     "autoI18n": "dist/bundle.js",

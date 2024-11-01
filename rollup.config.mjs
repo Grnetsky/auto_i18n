@@ -4,11 +4,14 @@ import { babel } from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json'; // 导入 JSON 插件
 
 export default {
-    input: 'bin/autoI18n.js', // 入口文件路径
-    output: {
-        file: 'dist/bundle.js', // 输出文件路径
-        format: 'cjs' // 输出格式为 CommonJS
-    },
+    input: ['bin/autoI18n.js', 'bin/collectString.js'],  // 多个入口文件
+    output: [
+        {
+            dir: 'output',            // 输出目录
+            format: 'cjs',             // 输出格式
+            entryFileNames: '[name].js', // 输出文件名模板
+        },
+    ],
     plugins: [
         json(),
         resolve(), // 处理模块解析
