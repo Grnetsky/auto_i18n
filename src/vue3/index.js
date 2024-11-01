@@ -18,24 +18,23 @@ export default function vue3Modifier(config,resolePaths){
     //3.在i18n文件夹下创建语言文件
     createLanguageFiles(i18nPath,config)
     // 4. 写入index.js中的内容
-    const indexContent = `import {createI18n} from 'vue-i18n';
-    import {${config._target.join(',')}} from './lang';
-    const i18n = createI18n({
-        legacy: false,
-        locale: localStorage.getItem('i18n') || navigator.language,    
-        silentTranslationWarn: true,
-        missingWarn: false,
-        silentFallbackWarn: true,
-        fallbackWarn: false,  
-        fallbackLocale: 'zh',
-        globalInjection: true,  
-        messages: {
-            ${config._target.join(',')}
-        },
-        missing(locale,key){
-            return key;
-        }
-    });
+    const indexContent = `import {createI18n} from 'vue-i18n';\nimport {${config._target.join(',')}} from './lang';
+const i18n = createI18n({
+    legacy: false,
+    locale: localStorage.getItem('i18n') || navigator.language,    
+    silentTranslationWarn: true,
+    missingWarn: false,
+    silentFallbackWarn: true,
+    fallbackWarn: false,  
+    fallbackLocale: 'zh',
+    globalInjection: true,  
+    messages: {
+        ${config._target.join(',')}
+    },
+    missing(locale,key){
+        return key;
+    }
+});
 
 export default i18n;
 `

@@ -108,3 +108,25 @@ export function deepAssign(target, ...sources) {
 
     return target;
 }
+
+export function prependTextToFile(filePath, textToPrepend, callback) {
+    // 读取文件内容
+    fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+            callback(err);
+            return;
+        }
+
+        // 在文件内容前面添加文本
+        const newData = textToPrepend + data;
+
+        // 将新的内容写回文件
+        fs.writeFile(filePath, newData, 'utf8', (err) => {
+            if (err) {
+                callback(err);
+                return;
+            }
+            callback(null);
+        });
+    });
+}
