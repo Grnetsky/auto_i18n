@@ -30,11 +30,6 @@ program
                         name: 'vue3',
                         value: 'vue3',
                         description: '使用vue3',
-                    },
-                    {
-                        name: 'vue2',
-                        value: 'vue2',
-                        description: '使用vue2',
                     }
                 ],
             })
