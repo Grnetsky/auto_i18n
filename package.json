@@ -1,5 +1,5 @@
 {
-  "name": "autoI18n",
+  "name": "perfecti18n",
   "version": "0.1.0",
   "description": "Automatically set the front-end project to i18n",
   "main": "index.js",
@@ -9,11 +9,11 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c && node output/autoI18n.js cli"
+    "build": "rollup -c"
   },
   "bin": {
-    "autoI18n": "dist/bundle.js",
-    "i18nTrans": "./bin/collectString.js"
+    "autoI18n": "output/autoI18n.js",
+    "i18nJs": "output/collectString.js"
   },
   "dependencies": {
     "@inquirer/prompts": "^7.0.0",
