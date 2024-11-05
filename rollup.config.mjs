@@ -4,7 +4,7 @@ import { babel } from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json'; // 导入 JSON 插件
 
 export default {
-    input: ['bin/autoI18n.js', 'bin/collectString.js'],  // 多个入口文件
+    input: ['bin/autoI18n.js', 'bin/collectString.js','bin/t.js'],  // 多个入口文件
     output: [
         {
             dir: 'output',            // 输出目录

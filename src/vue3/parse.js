@@ -4,7 +4,7 @@ import * as htmlparser2 from "htmlparser2";
 import domSerializer from "dom-serializer";
 
 
-const propPrefix = [':','@','v-on','v-bind']
+const propPrefix = [':','@','v-']
 export function parseVue(vuePath,config) {
     if (fs.existsSync(vuePath)) {
         const content = fs.readFileSync(vuePath, { encoding: 'utf8' });

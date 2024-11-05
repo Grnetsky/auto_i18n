@@ -3,7 +3,9 @@
   "version": "0.1.1",
   "description": "Automatically set the front-end project to i18n",
   "main": "index.js",
-  "keywords": ["i18n"],
+  "keywords": [
+    "i18n"
+  ],
   "private": false,
   "publishConfig": {
     "access": "public"
@@ -19,7 +21,8 @@
   "dependencies": {
     "crypto-js": "^4.2.0",
     "dom-serializer": "^2.0.0",
-    "htmlparser2": "^9.1.0"
+    "htmlparser2": "^9.1.0",
+    "opencc": "^1.1.8"
   },
   "devDependencies": {
     "@babel/core": "^7.25.9",
