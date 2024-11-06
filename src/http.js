@@ -1,4 +1,6 @@
 import {writeFile} from "./utils/file";
+import fs from "fs";
+import path from "node:path";
 const http = require('http');
 const CryptoJS = require("crypto-js");
 const querystring = require('querystring');
@@ -56,6 +58,10 @@ export function translate(chineseList,langPath,config,write=true) {
                                 translateResults.forEach((item,index) => {
                                     json[chineseList[index]] = item.translation;
                                 });
+                                const _langPath = langPath || path.resolve(config.rootPath,'src/i18n/lang');
+                                if(!fs.existsSync(path.resolve(_langPath,config._target[index]+'.json'))){
+                                    fs.writeFileSync(path.resolve(_langPath,config._target[index]+'.json'), config.langFileDefaultContent, { encoding: 'utf8' });
+                                }
                                 if(write) writeFile(langPath, config._target[index]+'.json', JSON.stringify(json, null, 2));
                                 resolve(json);
                             } else {

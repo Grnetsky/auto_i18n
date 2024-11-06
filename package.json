@@ -1,6 +1,6 @@
 {
   "name": "perfecti18n",
-  "version": "0.2",
+  "version": "0.2.2",
   "description": "Automatically set the front-end project to i18n",
   "main": "index.js",
   "keywords": [
@@ -15,7 +15,7 @@
     "build": "rollup -c"
   },
   "bin": {
-    "autoI18n": "output/autoI18n.js"
+    "pi18n": "output/autoI18n.js"
   },
   "dependencies": {
     "crypto-js": "^4.2.0",

@@ -19518,7 +19518,6 @@ function initConfig(program, init = {}) {
     userConfig = require(Path__namespace.resolve(__dirname, program.config));
   }
   const config = deepAssign(defaultConfig, userConfig);
-  console.log(config);
   config.rootPath = getRootDirectory(config.input);
   config._target = normalizeArray(config.target);
   const validate = !validateConfig(config);
@@ -22455,6 +22454,12 @@ function translate(chineseList, langPath, config, write = true) {
               translateResults.forEach((item, index) => {
                 json[chineseList[index]] = item.translation;
               });
+              const _langPath = langPath || Path.resolve(config.rootPath, 'src/i18n/lang');
+              if (!fs.existsSync(Path.resolve(_langPath, config._target[index] + '.json'))) {
+                fs.writeFileSync(Path.resolve(_langPath, config._target[index] + '.json'), config.langFileDefaultContent, {
+                  encoding: 'utf8'
+                });
+              }
               if (write) writeFile(langPath, config._target[index] + '.json', JSON.stringify(json, null, 2));
               resolve(json);
             } else {
@@ -22532,7 +22537,9 @@ export default i18n;
       const content = parseVue(vue, vue3Config);
       writeFile(vue, '', content);
     });
-    translate(Array.from(vue3Config.chineseSet), Path.resolve(i18nPath, './lang'), config);
+    translate(Array.from(vue3Config.chineseSet), Path.resolve(i18nPath, './lang'), config).then(() => {
+      console.log("执行完成(cli-vue3)");
+    });
   }
   // 处理所有.vue文件
 }
@@ -22611,7 +22618,6 @@ var autoJs = config => {
     });
   }
   translate(Array.from(chineseSet), undefined, config, false).then(json => {
-    console.log(json, chineseSet, config, 'result');
     json.forEach((item, index) => {
       if (item.status === 'fulfilled') {
         const data = item.value;
@@ -22621,6 +22627,7 @@ var autoJs = config => {
         writeFile(langPath, '', JSON.stringify(langJson, null, 2));
       }
     });
+    console.log("执行完成(js)");
   });
 };
 
@@ -22650,6 +22657,7 @@ var t = config => {
         writeFile(langPath, '', JSON.stringify(langJson, null, 2));
       }
     });
+    console.log("执行完成(t)");
   });
 };
 

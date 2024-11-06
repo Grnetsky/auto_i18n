@@ -58,7 +58,9 @@ export default i18n;
             const content = parseVue(vue,vue3Config)
             writeFile(vue,'',content)
         })
-        translate(Array.from(vue3Config.chineseSet),Path.resolve(i18nPath,'./lang'),config)
+        translate(Array.from(vue3Config.chineseSet),Path.resolve(i18nPath,'./lang'),config).then(()=>{
+            console.log("执行完成(cli-vue3)")
+        })
     }
     // 处理所有.vue文件
 

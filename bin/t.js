@@ -21,5 +21,6 @@ export default (config)=>{
                 writeFile(langPath,'',JSON.stringify(langJson,null,2))
             }
         })
+        console.log("执行完成(t)")
     })
 }

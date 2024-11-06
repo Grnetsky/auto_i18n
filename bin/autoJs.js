@@ -43,7 +43,6 @@ export default (config)=>{
     }
 
     translate(Array.from(chineseSet),undefined,config,false).then((json)=>{
-        console.log(json,chineseSet,config,'result')
         json.forEach((item,index) => {
             if(item.status ===  'fulfilled'){
                 const data = item.value
@@ -53,5 +52,6 @@ export default (config)=>{
                 writeFile(langPath,'',JSON.stringify(langJson,null,2))
             }
         })
+        console.log("执行完成(js)")
     })
 }
