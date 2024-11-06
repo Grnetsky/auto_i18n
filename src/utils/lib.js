@@ -1,4 +1,6 @@
-import {createFolder, readFile, writeFile} from "./file";
+import {createFolder, getRootDirectory, readFile, writeFile} from "./file";
+import * as path from "node:path";
+import defaultConfig from "../../i18n.config";
 export function addI18nInPackageJon(config){
     const packageJson = JSON.parse(readFile(config.input,config.PACKAGE_JSON))
     packageJson.dependencies[config[config.frameWork].Dep] = config[config.frameWork].DepVersion
@@ -18,7 +20,7 @@ export function createI18NFolder(config){
 
 export function createLanguageFiles(i18nPath,config) {
     config._target.forEach((lang)=>{
-        const langPath = `${i18nPath}/lang/${lang}.` + config.language
+        const langPath = `${i18nPath}/lang/${lang}.json`
         writeFile(i18nPath,langPath,config.langFileDefaultContent)
     })
 }
@@ -70,3 +72,59 @@ export function normalizeArray(arr) {
         return normalizeVariableName(name); // 否则转换为合法名称
     });
 }
+
+function isObject(obj) {
+    return obj !== null && typeof obj === 'object';
+}
+
+export function deepAssign(target, ...sources) {
+    if (!isObject(target)) {
+        throw new TypeError('Target must be an object');
+    }
+
+    sources.forEach(source => {
+        if (isObject(source)) {
+            Object.keys(source).forEach(key => {
+                const targetValue = target[key];
+                const sourceValue = source[key];
+
+                // 如果目标值和源值均为对象，递归合并
+                if (isObject(targetValue) && isObject(sourceValue)) {
+                    deepAssign(targetValue, sourceValue);
+                } else {
+                    // 否则直接赋值
+                    target[key] = sourceValue;
+                }
+            });
+        }
+    });
+
+    return target;
+}
+export function initConfig(program,init = {}) {
+    let userConfig = {...init}
+    if(program.config){
+        userConfig = require(path.resolve(__dirname,program.config))
+    }
+    const config = deepAssign(defaultConfig, userConfig);
+    console.log(config);
+    config.rootPath = getRootDirectory(config.input)
+    config._target = normalizeArray(config.target)
+    const validate = !validateConfig(config)
+    if(validate.error){
+        throw new Error(validate.error)
+    }
+    return config
+}
+
+function validateConfig(config){
+    if(config.target && !Array.isArray(config.target)){
+        return {
+            error:"目标语言项必须为数组"
+        }
+    }
+    return {
+        success:true
+    }
+}
+

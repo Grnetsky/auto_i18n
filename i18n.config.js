@@ -4,7 +4,7 @@ module.exports =  {
     PACKAGE_JSON : 'package.json',
     language : '',
     excludes : ['node_modules','dist','^.'],
-    langFileDefaultContent:'const a = {};export default a',
+    langFileDefaultContent:'{}',
     AppID: '440b4cce9f385b32',
     key: '3IpcveGENOsrkU3gAKAZJGtnDk5wqAh8',
     target:[],

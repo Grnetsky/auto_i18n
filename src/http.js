@@ -56,7 +56,7 @@ export function translate(chineseList,langPath,config,write=true) {
                                 translateResults.forEach((item,index) => {
                                     json[chineseList[index]] = item.translation;
                                 });
-                                if(write) writeFile(langPath, config._target[index]+'.'+config.language, `const a = ${JSON.stringify(json, null, 2)};export default a`);
+                                if(write) writeFile(langPath, config._target[index]+'.json', JSON.stringify(json, null, 2));
                                 resolve(json);
                             } else {
                                 console.error(`Error: ${result.errorCode}`);

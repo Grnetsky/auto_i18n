@@ -1,5 +1,6 @@
 import Path from "node:path";
 import fs from "fs";
+import path from "node:path";
 
 export function readFile(path, fileName, code = "utf8") {
     const filePath = Path.resolve(path,fileName);
@@ -54,6 +55,24 @@ export function getAllFolderPaths(directory) {
     return folderPaths;
 }
 
+export function getRootDirectory(filePath) {
+
+    // 将路径分割为数组，示例: ['C:', 'Users', 'Andy', 'Desktop', '蔡豪', 'account-fe', 'src', 'i18n', 'language']
+    const pathSegments = filePath.split(path.sep);
+
+    // 查找 'src' 的索引，假设 'src' 是项目根目录后的第一个目录
+    const srcIndex = pathSegments.indexOf('src');
+
+    if (srcIndex === -1) {
+        throw new Error("The specified path is not within a recognizable Vue project structure.");
+    }
+
+    // 构建根目录路径
+    const rootPath = pathSegments.slice(0, srcIndex).join(path.sep);
+
+    return rootPath;
+}
+
 export function findFilesByExtension(directory, extension,recursion = true) {
     let filePaths = [];
     try {
@@ -80,34 +99,7 @@ export function findFilesByExtension(directory, extension,recursion = true) {
 }
 
 
-function isObject(obj) {
-    return obj !== null && typeof obj === 'object';
-}
 
-export function deepAssign(target, ...sources) {
-    if (!isObject(target)) {
-        throw new TypeError('Target must be an object');
-    }
-
-    sources.forEach(source => {
-        if (isObject(source)) {
-            Object.keys(source).forEach(key => {
-                const targetValue = target[key];
-                const sourceValue = source[key];
-
-                // 如果目标值和源值均为对象，递归合并
-                if (isObject(targetValue) && isObject(sourceValue)) {
-                    deepAssign(targetValue, sourceValue);
-                } else {
-                    // 否则直接赋值
-                    target[key] = sourceValue;
-                }
-            });
-        }
-    });
-
-    return target;
-}
 
 export function prependTextToFile(filePath, textToPrepend, callback) {
     // 读取文件内容

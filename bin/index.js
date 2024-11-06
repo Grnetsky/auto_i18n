@@ -1,2 +1,2 @@
 export * from './autoI18n'
-export * from './collectString'
+export * from './autoJs'

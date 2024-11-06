@@ -14,7 +14,6 @@ export default function vue3Modifier(config,resolePaths){
     addI18nInPackageJon(config);
     //2.在src/下创建 i18n文件夹
     const i18nPath = createI18NFolder(config)    //4.在main.js中引入vue-i18n
-    config._target = normalizeArray(config.target)
     //3.在i18n文件夹下创建语言文件
     createLanguageFiles(i18nPath,config)
     // 4. 写入index.js中的内容
@@ -40,9 +39,13 @@ export default i18n;
 `
     writeFile(i18nPath,'index.' + config.language,indexContent)
     const langIndexContent = config._target.reduce((acc, cur)=>{
-        return acc + `export {default as ${cur}} from './${cur}.${config.language}';\n`
+        return acc + `import ${'_'+cur} from './${cur}.json';\n`
     },'')
-    writeFile(Path.resolve(i18nPath,'./lang'),'index.'+ config.language,langIndexContent);
+
+    const exportContent = config._target.reduce((acc, cur)=>{
+        return acc + `export const ${cur} = ${'_'+cur};\n`
+    },'')
+    writeFile(Path.resolve(i18nPath,'./lang'),'index.'+ config.language,langIndexContent + exportContent);
     appendFile(srcPath,'main.'+config.language,vue3Config.MAIN_JS_APPEND);
     if(resolePaths.length > 0){
         // 处理指定路径下的.vue文件
