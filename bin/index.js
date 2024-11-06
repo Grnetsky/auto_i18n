@@ -1,2 +1,1 @@
-export * from './autoI18n'
-export * from './autoJs'
+export * from './pI18n'

@@ -107,7 +107,9 @@ export function initConfig(program,init = {}) {
         userConfig = require(path.resolve(__dirname,program.config))
     }
     const config = deepAssign(defaultConfig, userConfig);
-    config.rootPath = getRootDirectory(config.input)
+    if(config.input){
+        config.rootPath = getRootDirectory(config.input)
+    }
     config._target = normalizeArray(config.target)
     const validate = !validateConfig(config)
     if(validate.error){

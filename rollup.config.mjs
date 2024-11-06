@@ -4,10 +4,10 @@ import { babel } from '@rollup/plugin-babel';
 import json from '@rollup/plugin-json'; // 导入 JSON 插件
 
 export default {
-    input: ['bin/autoI18n.js'],  // 多个入口文件
+    input: ['bin/pI18n.js'],  // 多个入口文件
     output: [
         {
-            dir: 'output',            // 输出目录
+            dir: 'dist',            // 输出目录
             format: 'cjs',             // 输出格式
             entryFileNames: '[name].js', // 输出文件名模板
         },

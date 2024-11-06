@@ -1,6 +1,6 @@
 {
   "name": "perfecti18n",
-  "version": "0.2.2",
+  "version": "0.2.5",
   "description": "Automatically set the front-end project to i18n",
   "main": "index.js",
   "keywords": [
@@ -15,8 +15,12 @@
     "build": "rollup -c"
   },
   "bin": {
-    "pi18n": "output/autoI18n.js"
+    "pi18n": "dist/pI18n.js"
   },
+  "files": [
+    "dist/pI18n.js",
+    "README.md"
+  ],
   "dependencies": {
     "crypto-js": "^4.2.0",
     "dom-serializer": "^2.0.0",
@@ -26,12 +30,12 @@
   "devDependencies": {
     "@babel/core": "^7.25.9",
     "@babel/preset-env": "^7.25.9",
+    "@inquirer/prompts": "^7.0.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^15.3.0",
-    "rollup": "^4.24.0",
     "commander": "^12.1.0",
-    "@inquirer/prompts": "^7.0.0"
+    "rollup": "^4.24.0"
   }
 }

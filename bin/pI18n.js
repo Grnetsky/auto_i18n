@@ -1,6 +1,6 @@
 const {select,input,Separator,checkbox } =  require('@inquirer/prompts');
 const {factory} = require("../src/index");
-const {getAllFolderPaths, getRootDirectory } = require("../src/utils/file");
+const {getAllFolderPaths } = require("../src/utils/file");
 const {initConfig,normalizeArray} = require("../src/utils/lib");
 const autoJs = require("../bin/autoJs.js");
 const t = require("../bin/t.js");
@@ -14,8 +14,8 @@ program
     .command('cli')
     .description("Let's do this")
     .option('-c, --config <path>', '配置文件',)
-    .action(async () => {
-        const config = initConfig(program)
+    .action(async (_config) => {
+        const config = initConfig(_config)
         if(!config.frameWork) {
             config.frameWork = await select({
                 message: '选择项目所使用的前端框架',
@@ -34,6 +34,7 @@ program
 
 
         !config.target.length && ( config.target = await input({ message: '输入要兼容的语言代码（具体代码可查看有道语言列表：https://ai.youdao.com/DOCSIRMA/html/trans/api/plwbfy/index.html#section-8）以空格分开' }).then((s)=>{return s.split(' ')}));
+        config._target = normalizeArray(config.target)
 
         !config.language &&  (config.language = await select({
             message: '选择项目所使用的语言',
