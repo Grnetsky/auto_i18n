@@ -1,1 +1,2 @@
-export * from './bin'
+const a = require('dist/pI18n')
+module.exports = a
