@@ -12,9 +12,11 @@ export default (config)=>{
     switch (config.input.split('.').pop()) {
         case 'ts':
             jscript = fileText
+            pre = `import i18n from "/src/i18n"\nconst $t = i18n.global.t\n`
             break;
         case 'js':
             jscript = fileText
+            pre = `import i18n from "/src/i18n"\nconst $t = i18n.global.t\n`
             break;
         case 'vue':
             pre = `\nimport {getCurrentInstance} from 'vue';\nconst { proxy } = getCurrentInstance();\nconst $t = proxy.$t\n`

@@ -16,7 +16,7 @@ export default (config)=>{
             if(item.status ===  'fulfilled'){
                 const data = item.value
                 const langPath = `${config.rootPath}/src/i18n/lang/${config._target[index]}.json`
-                const langJson = JSON.parse(readFile(config.input,langPath))
+                const langJson = JSON.parse(readFile(langPath,''))
                 Object.assign(langJson,data)
                 writeFile(langPath,'',JSON.stringify(langJson,null,2))
             }
