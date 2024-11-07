@@ -43,7 +43,7 @@ export function getAllFolderPaths(directory) {
             if (item.isDirectory()) {
                 const folderPath = Path.join(directory, item.name);
                 folderPaths.push(folderPath);
-                // 如果需要递归获取子目录，可以递归调用
+                // 需要递归获取子目录递归调用
                 // const subFolderPaths = await getAllFolderPaths(folderPath);
                 // folderPaths = folderPaths.concat(subFolderPaths);
             }
@@ -57,10 +57,9 @@ export function getAllFolderPaths(directory) {
 
 export function getRootDirectory(filePath) {
 
-    // 将路径分割为数组，示例: ['C:', 'Users', 'Andy', 'Desktop', '蔡豪', 'account-fe', 'src', 'i18n', 'language']
+    // 将路径分割为数组，
     const pathSegments = filePath.split(path.sep);
 
-    // 查找 'src' 的索引，假设 'src' 是项目根目录后的第一个目录
     const srcIndex = pathSegments.indexOf('src');
 
     if (srcIndex === -1) {
@@ -102,17 +101,14 @@ export function findFilesByExtension(directory, extension,recursion = true) {
 
 
 export function prependTextToFile(filePath, textToPrepend, callback) {
-    // 读取文件内容
     fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
             callback(err);
             return;
         }
 
-        // 在文件内容前面添加文本
         const newData = textToPrepend + data;
 
-        // 将新的内容写回文件
         fs.writeFile(filePath, newData, 'utf8', (err) => {
             if (err) {
                 callback(err);
