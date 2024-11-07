@@ -35,13 +35,27 @@ export default (config)=>{
     }
 
     function wrapChineseWithT(scriptContent) {
-        //
+        // 使用正则表达式匹配 JavaScript 的单行和多行注释
+        const commentRegex = /\/\/.*|\/\*[\s\S]*?\*\//g;
+
+        // 使用正则表达式匹配中文字符
         const chineseRegex = /(["'`])([^"'`]*[\u4e00-\u9fa5]+[^"'`]*)\1/g;
 
-        return scriptContent.replace(chineseRegex, (fullMatch, quote, chineseString) => {
-            chineseSet.add(chineseString)
+        // 找出所有注释，并将它们替换为占位符，以防止处理注释内容
+        const comments = [];
+        const scriptWithoutComments = scriptContent.replace(commentRegex, (match) => {
+            comments.push(match);
+            return `__COMMENT__${comments.length - 1}__`;
+        });
+
+        // 处理去掉注释后的脚本内容
+        const scriptWithWrappedChinese = scriptWithoutComments.replace(chineseRegex, (fullMatch, quote, chineseString) => {
+            chineseSet.add(chineseString);
             return `$t(${quote}${chineseString}${quote})`;
         });
+
+        // 恢复注释
+        return scriptWithWrappedChinese.replace(/__COMMENT__(\d+)__/g, (match, index) => comments[index]);
     }
 
     translate(Array.from(chineseSet),undefined,config,false).then((json)=>{

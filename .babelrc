@@ -1,0 +1,14 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "ie": "11"  // 或其他需要支持的环境
+        },
+        "useBuiltIns": "entry", // 或 "entry"
+        "corejs": 3
+      }
+    ]
+  ]
+}

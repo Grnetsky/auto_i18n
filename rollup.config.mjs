@@ -17,7 +17,8 @@ export default {
         resolve(), // 处理模块解析
         commonjs(), // 转换 CommonJS 模块为 ES6
         babel({
-            exclude: 'node_modules/**',
+            babelrc: true,
+            babelHelpers: 'bundled',
         }),
     ],
     external:[]
